@@ -1,6 +1,6 @@
 from django.db import models
 
-class GameUsers(models.Model):
+class Messages(models.Model):
     """GameUsers Model
     Fields:
         posterId (ForeignKey): the user that made the event
@@ -9,9 +9,9 @@ class GameUsers(models.Model):
         time (TimeFIeld): The time of the event
         description (CharField): : The text description of the event
     """
-    posterUserid  = models.ForeignKey("Posts", on_delete=models.CASCADE)
+    posterUserid  = models.ForeignKey("Posts", on_delete=models.CASCADE,related_name='PostUserId')
     postId = models.ForeignKey("Posts", on_delete=models.CASCADE)
     userId = models.ForeignKey("GameUsers", on_delete=models.CASCADE)
     message  = models.CharField(max_length=50)
     seen = models.BooleanField()
-    timeStamp= models.TimeField() 
+    timeStamp= models.IntegerField(null=True) 

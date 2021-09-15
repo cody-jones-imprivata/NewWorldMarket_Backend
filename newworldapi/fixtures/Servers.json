@@ -1,0 +1,72 @@
+[
+    {
+      "model": "newworldapi.Servers",
+      "pk": 1,
+      "fields": {
+        "serverName": "Olympus"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 2,
+      "fields": {
+        "serverName": "Atlantis"
+        }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 3,
+      "fields": {
+        "serverName": "Orun"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 4,
+      "fields": {
+        "serverName": "Yama"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 5,
+      "fields": {
+        "serverName": "Maski"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 6,
+      "fields": {
+        "serverName": "Xanadu"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 7,
+      "fields": {
+        "serverName": "Penglai"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 8,
+      "fields": {
+        "serverName": "Niraya"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 9,
+      "fields": {
+        "serverName": "Sanghata"
+      }
+    },
+    {
+      "model": "newworldapi.Servers",
+      "pk": 10,
+      "fields": {
+        "serverName": "Sanjiva"
+      }
+    }
+]

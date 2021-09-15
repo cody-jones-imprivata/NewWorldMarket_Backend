@@ -1,0 +1,26 @@
+[
+    {
+      "model": "newworldapi.Messages",
+      "pk": 1,
+      "fields": {
+        "posterUserid": 2,
+        "postId": 1,
+        "userId": 1,
+        "message": "Welcome",
+        "seen": true,
+        "timeStamp": 1631630877
+      }
+    },
+    {
+      "model": "newworldapi.Messages",
+      "pk": 2,
+      "fields": {
+        "posterUserid": 2,
+        "postId": 1,
+        "userId": 1,
+        "message": "Welcome",
+        "seen": false,
+        "timeStamp": 1631630877
+        }
+    }
+]

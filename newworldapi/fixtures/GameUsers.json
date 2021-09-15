@@ -1,0 +1,14 @@
+[
+    {
+      "model": "newworldapi.GameUsers",
+      "pk": 1,
+      "fields": {
+        "user":1,
+        "inGamename": "Wicks",
+        "discord": "Wicks#17274",
+        "faction": 1,
+        "server": 2
+
+      }
+    }
+]
