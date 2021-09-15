@@ -1,6 +1,6 @@
 from django.db import models
 
-class GameUsers(models.Model):
+class Items(models.Model):
     """GameUsers Model
     Fields:
         posterId (ForeignKey): the user that made the event
@@ -13,7 +13,6 @@ class GameUsers(models.Model):
     type = models.CharField(max_length=50)
     rarity = models.CharField(max_length=50)
     tier  = models.CharField(max_length=50)
-    gearScore = models.CharField(max_length=50)
-    itemLink = models.CharField(max_length=50)
-    itemImg = models.CharField(max_length=50)
+    link = models.CharField(max_length=50)
+    image = models.CharField(max_length=50)
     

@@ -1,0 +1,24 @@
+[
+    {
+      "model": "newworldapi.Posts",
+      "pk": 1,
+      "fields": {
+        "item": 2,
+        "settlementId": 1,
+        "posterId": 1,
+        "description": "True",
+        "timeStamp": 1631630877
+      }
+    },
+    {
+      "model": "newworldapi.Posts",
+      "pk": 2,
+      "fields": {
+        "item": 2,
+        "settlementId": 1,
+        "posterId": 1,
+        "description": "True",
+        "timeStamp": 1631630877
+        }
+    }
+]

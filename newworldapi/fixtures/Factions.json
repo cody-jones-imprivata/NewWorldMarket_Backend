@@ -1,0 +1,23 @@
+[
+    {
+      "model": "newworldapi.Factions",
+      "pk": 1,
+      "fields": {
+        "factionName": "syndicate"
+      }
+    },
+    {
+      "model": "newworldapi.Factions",
+      "pk": 2,
+      "fields": {
+        "factionName": "Marauders"
+        }
+    },
+    {
+        "model": "newworldapi.Factions",
+        "pk": 2,
+        "fields": {
+          "factionName": "Covenant"
+          }
+      }
+]

@@ -1,5 +1,9 @@
 from django.db import models
 
-class GameUsers(models.Model):
+class Servers(models.Model):
+    """[summary]
 
-    ServerName = models.CharField(max_length=50)
+    Args:
+        models ([type]): [description]
+    """
+    serverName = models.CharField(max_length=50)

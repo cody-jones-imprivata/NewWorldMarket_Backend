@@ -1,6 +1,6 @@
 from django.db import models
 
-class GameUsers(models.Model):
+class Posts(models.Model):
     """GameUsers Model
     Fields:
         posterId (ForeignKey): the user that made the event
@@ -13,4 +13,4 @@ class GameUsers(models.Model):
     item = models.ForeignKey("Items", on_delete=models.CASCADE)
     settlementId = models.ForeignKey("Settlements", on_delete=models.CASCADE)
     description  = models.CharField(max_length=50)
-    timeStamp = models.TimeField()
+    timeStamp = models.IntegerField() 

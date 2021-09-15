@@ -1,0 +1,72 @@
+[
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 1,
+      "fields": {
+        "settlementName": "Everfall"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 2,
+      "fields": {
+        "settlementName": "First Light"
+        }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 3,
+      "fields": {
+        "settlementName": "Monarch's Bluffs"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 4,
+      "fields": {
+        "settlementName": "Windsward"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 5,
+      "fields": {
+        "settlementName": "Brightwood"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 6,
+      "fields": {
+        "settlementName": "Cutlass Keys"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 7,
+      "fields": {
+        "settlementName": "Ebonscale Reach"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 8,
+      "fields": {
+        "settlementName": "Mourningdale"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 9,
+      "fields": {
+        "settlementName": "Reekwater"
+      }
+    },
+    {
+      "model": "newworldapi.Settlements",
+      "pk": 10,
+      "fields": {
+        "settlementName": "Weaver's Fen"
+      }
+    }
+]
