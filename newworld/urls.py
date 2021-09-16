@@ -17,16 +17,21 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
-from newworldapi.views import register_user, login_user,PostViewSet,MessageViewSet
+from newworldapi.views import *
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'posts', PostViewSet, 'post')
-router.register(r'messages', MessageViewSet, 'message')
-
+router.register(r'posts', PostViewSet, 'posts')
+router.register(r'messages', MessageViewSet, 'messages')
+router.register(r'factions', FactionViewSet, 'factions')
+router.register(r'settlements', SettlementViewSet, 'settlements')
+router.register(r'gameusers', GameusersViewSet, 'gameusers')
+router.register(r'servers', ServerViewSet, 'servers')
+router.register(r'items', ItemViewSet, 'items')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('register', register_user),
     path('login', login_user),
+    path('admin/', admin.site.urls),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]

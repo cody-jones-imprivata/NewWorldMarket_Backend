@@ -58,7 +58,7 @@ def register_user(request):
         inGamename=request.data['inGamename'],
         discord=request.data['discord'],
         faction=request.data['faction'],
-        server=request.data['faction'],
+        server=request.data['server'],
         user=new_user
     )
 

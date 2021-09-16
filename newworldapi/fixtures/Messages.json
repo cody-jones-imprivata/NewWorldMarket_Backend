@@ -4,7 +4,7 @@
       "pk": 1,
       "fields": {
         "posterUserid": 2,
-        "postId": 1,
+        "postId": 2,
         "userId": 1,
         "message": "Welcome",
         "seen": true,
@@ -16,7 +16,7 @@
       "pk": 2,
       "fields": {
         "posterUserid": 2,
-        "postId": 1,
+        "postId": 3,
         "userId": 1,
         "message": "Welcome",
         "seen": false,
