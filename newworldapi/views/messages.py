@@ -6,10 +6,15 @@ from rest_framework import status
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from newworldapi.models import Posts, Items, GameUsers,Settlements
+from newworldapi.models import Posts, Messages
 
+"""
+To do:
+combine postviews and messageviews together
 
-class PostViewSet(ViewSet):
+"""
+
+class MessageViewSet(ViewSet):
 
     def create(self, request):
         """[summary]
@@ -18,18 +23,19 @@ class PostViewSet(ViewSet):
         Returns:
             [type]: [description]
         """
-        Poster = User.objects.get(user=request.auth.user)
-        Settlement = Settlements.objects.get(pk=request.data['SettlementId'])
-        Item = Items.objects.get(pk=request.data['ItemId'])
+        userId = User.objects.get(user=request.auth.user)
+        postId = Posts.objects.get(pk=request.data['postId'])
+        posterUserid = Posts.objects.get(pk=request.data['postUserid'])
         try:
-            post = Posts.objects.create(
-                posterId=Poster,
-                settlementId=Settlement,
-                item=Item,
-                description=request.data['description'],
+            message = Messages.objects.create(
+                posterUserid=posterUserid,
+                userId=userId,
+                postId=postId,
+                seen = request.data['seen'],
+                message=request.data['message'],
                 TimeStamp=request.data['timeStamp'],
             )
-            serializer = PostSerializer(post, context={'request': request})
+            serializer = MessageSerializer(message, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except ValidationError as ex:
@@ -46,40 +52,39 @@ class PostViewSet(ViewSet):
             #   http://localhost:8000/games/2
             #
             # The `2` at the end of the route becomes `pk`
-            post = Posts.objects.get(pk=pk)
-            serializer = PostSerializer(post, context={'request': request})
+            message = Messages.objects.get(pk=pk)
+            serializer = MessageSerializer(message, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
     def update(self, request, pk):
-        post = Posts.objects.get(pk=pk)
-        post.settlementId = Settlements.objects.get(pk=request.data['SettlementId'])
-        post.description = request.data['skill_level']
-        post.item = Items.objects.get(pk=request.data['ItemId'])
-        post.save()
+        message = Messages.objects.get(pk=pk)
+        message.message = request.data['message']
+        message.seen = request.data['seen']
+        message.save()
 
-        serializer = PostSerializer(post, context={'request': request})
+        serializer = MessageSerializer(message, context={'request': request})
 
         return Response(serializer.data)
 
     def list(self, request):
-        posts = Posts.objects.all()
+        messages = Messages.objects.all()
 
-        settlement = request.query_params.get('settlementid', None)
+        postId = request.query_params.get('postId', None)
 
-        if settlement is not None:
-            posts = posts.filter(game_type__id=settlement)
+        if postId is not None:
+            messages = messages.filter(postId=postId)
 
-        serializer = PostSerializer(
-            posts, many=True, context={'request': request})
+        serializer = MessageSerializer(
+            messages, many=True, context={'request': request})
 
         return Response(serializer.data)
 
     def destroy(self, request, pk):
         try:
-            post = Posts.objects.get(pk=pk)
-            post.delete()
+            messages = Messages.objects.get(pk=pk)
+            messages.delete()
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
@@ -90,8 +95,8 @@ class PostViewSet(ViewSet):
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class PostSerializer(serializers.ModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Posts
+        model = Messages
         fields = '__all__'
-        # depth = 2
+        depth = 2

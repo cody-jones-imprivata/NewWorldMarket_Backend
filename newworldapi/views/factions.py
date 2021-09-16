@@ -6,7 +6,9 @@ from rest_framework import status
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from newworldapi.models import Posts, Messages
+from newworldapi.models import Factions
+from django.contrib.admin.views.decorators import staff_member_required
+from rest_framework.permissions import DjangoModelPermissions
 
 """
 To do:
@@ -14,8 +16,9 @@ combine postviews and messageviews together
 
 """
 
-class MessageViewSet(ViewSet):
-
+class FactionViewSet(ViewSet):
+    permission_classes = [DjangoModelPermissions]
+    queryset = Factions.objects.none()
     def create(self, request):
         """[summary]
         Args:
@@ -23,24 +26,15 @@ class MessageViewSet(ViewSet):
         Returns:
             [type]: [description]
         """
-        userId = User.objects.get(user=request.auth.user)
-        postId = Posts.objects.get(pk=request.data['postId'])
-        posterUserid = Posts.objects.get(pk=request.data['postUserid'])
         try:
-            message = Messages.objects.create(
-                posterUserid=posterUserid,
-                userId=userId,
-                postId=postId,
-                seen = request.data['seen'],
-                message=request.data['message'],
-                TimeStamp=request.data['timeStamp'],
+            faction = Factions.objects.create(
+                factionName = request.data['factionName']
             )
-            serializer = MessageSerializer(message, context={'request': request})
+            serializer = FactionSerializer(faction, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
-
     def retrieve(self, request, pk=None):
         """Handle GET requests for single game
         Returns:
@@ -52,51 +46,50 @@ class MessageViewSet(ViewSet):
             #   http://localhost:8000/games/2
             #
             # The `2` at the end of the route becomes `pk`
-            message = Messages.objects.get(pk=pk)
-            serializer = MessageSerializer(message, context={'request': request})
+            faction = Factions.objects.get(pk=pk)
+            serializer = FactionSerializer(faction, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
     def update(self, request, pk):
-        message = Messages.objects.get(pk=pk)
-        message.message = request.data['message']
-        message.seen = request.data['seen']
-        message.save()
+        faction = Factions.objects.get(pk=pk)
+        faction.factionName = request.data['factionName']
+        faction.save()
 
-        serializer = MessageSerializer(message, context={'request': request})
+        serializer = FactionSerializer(faction, context={'request': request})
 
         return Response(serializer.data)
 
     def list(self, request):
-        messages = Messages.objects.all()
+        factions = Factions.objects.all()
 
-        postId = request.query_params.get('postId', None)
+        factionName = request.query_params.get('factionName', None)
 
-        if postId is not None:
-            messages = messages.filter(postId=postId)
+        if factionName is not None:
+            factions = factions.filter(factionName=factionName)
 
-        serializer = MessageSerializer(
-            messages, many=True, context={'request': request})
+        serializer = FactionSerializer(
+            factions, many=True, context={'request': request})
 
         return Response(serializer.data)
-
+        
     def destroy(self, request, pk):
         try:
-            messages = Messages.objects.get(pk=pk)
-            messages.delete()
+            factions = Factions.objects.get(pk=pk)
+            factions.delete()
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        except Posts.DoesNotExist as ex:
-            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        except Factions.DoesNotExist as ex:
+            return Response({'Faction': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as ex:
-            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'Faction': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class MessageSerializer(serializers.ModelSerializer):
+class FactionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Messages
+        model = Factions
         fields = '__all__'
         # depth = 2
