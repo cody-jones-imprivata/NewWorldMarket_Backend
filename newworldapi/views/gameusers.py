@@ -21,6 +21,19 @@ class GameusersViewSet(ViewSet):
     permission_classes = [IsAdminUser]
     queryset = GameUsers.objects.none()
 
+    def destroy(self, request, pk):
+        try:
+            gameuser = GameUsers.objects.get(pk=pk)
+            gameuser.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except GameUsers.DoesNotExist as ex:
+            return Response({'GameUsers': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'GameUsers': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     def retrieve(self, request, pk=None):
         try:
             gameuser = GameUsers.objects.get(pk=pk)

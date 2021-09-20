@@ -21,7 +21,7 @@ class PostViewSet(ViewSet):
         try:
             #new post being created
             post = Posts.objects.create(
-                posterId=GameUsers.objects.get(pk=request.data['posterId']),
+                posterId=GameUsers.objects.get(user=request.auth.user.pk),
                 settlementId=Settlements.objects.get(pk=request.data['settlementId']),
                 item=Items.objects.get(pk=request.data['item']),
                 description=request.data['description'],
@@ -41,7 +41,7 @@ class PostViewSet(ViewSet):
         try:
             # `pk` is a parameter to this function, and
             # Django parses it from the URL route parameter
-            #   http://localhost:8000/games/2
+            #   http://localhost:8000/posts/2
             #
             # The `2` at the end of the route becomes `pk`
             post = Posts.objects.get(pk=pk)
@@ -93,6 +93,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Posts
         fields = '__all__'
         depth = 2
+
 
 class GameUserSerializer(serializers.ModelSerializer):
     """JSON serializer for RareUsers"""

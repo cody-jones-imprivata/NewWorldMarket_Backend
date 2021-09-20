@@ -1,16 +1,29 @@
+import json
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from newworldapi.models import GameUsers
+from rest_framework import status
+from newworldapi.models import GameUsers,Factions, Servers
+from rest_framework import serializers
+
+
+
+
+
+class MyUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GameUsers
+        fields = '__all__'
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
     '''Handles the authentication of a gamer
-
     Method arguments:
       request -- The full HTTP request object
     '''
@@ -24,15 +37,18 @@ def login_user(request):
     # If authentication was successful, respond with their token
     if authenticated_user is not None:
         token = Token.objects.get(user=authenticated_user)
+        User = GameUsers.objects.get(user=authenticated_user)
         data = {
             'valid': True,
-            'token': token.key
+            'token': token.key,
+            'user' : MyUserSerializer(User).data
         }
         return Response(data)
     else:
         # Bad login details were provided. So we can't log the user in.
-        data = { 'valid': False }
+        data = {'valid': False}
         return Response(data)
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -57,13 +73,13 @@ def register_user(request):
     gamer = GameUsers.objects.create(
         inGamename=request.data['inGamename'],
         discord=request.data['discord'],
-        faction=request.data['faction'],
-        server=request.data['server'],
+        faction=Factions.objects.get(pk=request.data['faction']) ,
+        server=Servers.objects.get(pk=request.data['server']),
         user=new_user
     )
 
     # Use the REST Framework's token generator on the new user account
     token = Token.objects.create(user=gamer.user)
     # Return the token to the client
-    data = { 'token': token.key }
+    data = { 'token': token.key}
     return Response(data)

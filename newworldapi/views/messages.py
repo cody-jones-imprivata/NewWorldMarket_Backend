@@ -5,8 +5,10 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
+from django.db.models.fields import BooleanField
 from rest_framework import serializers
-from newworldapi.models import Posts, Messages
+from django.db.models import Case, When
+from newworldapi.models import Posts, Messages,GameUsers
 
 """
 To do:
@@ -23,17 +25,15 @@ class MessageViewSet(ViewSet):
         Returns:
             [type]: [description]
         """
-        userId = User.objects.get(user=request.auth.user)
-        postId = Posts.objects.get(pk=request.data['postId'])
-        posterUserid = Posts.objects.get(pk=request.data['postUserid'])
+        
         try:
             message = Messages.objects.create(
-                posterUserid=posterUserid,
-                userId=userId,
-                postId=postId,
+                sender=GameUsers.objects.get(user=request.auth.user.pk),
+                receiver = GameUsers.objects.get(user=request.data['receiver']),
+                post=Posts.objects.get(pk=request.data['post']),
                 seen = request.data['seen'],
                 message=request.data['message'],
-                TimeStamp=request.data['timeStamp'],
+                timeStamp=request.data['timeStamp'],
             )
             serializer = MessageSerializer(message, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -69,17 +69,26 @@ class MessageViewSet(ViewSet):
         return Response(serializer.data)
 
     def list(self, request):
-        messages = Messages.objects.all()
+        """Handle GET requests to posts"""
+        # verify user and who is making put request
+        sender = GameUsers.objects.get(user=request.auth.user)
+        # get all comments from the database (works 9/15)
+        # comments = Comment.objects.all()
 
-        postId = request.query_params.get('postId', None)
+        # get all comments from the database that correspond to the current user
+        messages = Messages.objects.annotate(currentUser=Case(
+                                                When(sender=sender, then=True),
+                                                default=False,
+                                                output_field=BooleanField()
+                                            ))
 
-        if postId is not None:
-            messages = messages.filter(postId=postId)
+        post = self.request.query_params.get('post', None)
+        if post is not None:
+            messages = messages.filter(post= post)
 
-        serializer = MessageSerializer(
-            messages, many=True, context={'request': request})
-
+        serializer = MessageSerializer(messages, many=True, context={'request': request})
         return Response(serializer.data)
+
 
     def destroy(self, request, pk):
         try:
