@@ -3,9 +3,9 @@
       "model": "newworldapi.Messages",
       "pk": 1,
       "fields": {
-        "posterUserid": 2,
-        "postId": 2,
-        "userId": 1,
+        "post": 16,
+        "sender": 1,
+        "receiver": 3,
         "message": "Welcome",
         "seen": true,
         "timeStamp": 1631630877
@@ -15,9 +15,9 @@
       "model": "newworldapi.Messages",
       "pk": 2,
       "fields": {
-        "posterUserid": 2,
-        "postId": 3,
-        "userId": 1,
+        "post": 18,
+        "sender": 1,
+        "receiver": 3,
         "message": "Welcome",
         "seen": false,
         "timeStamp": 1631630877

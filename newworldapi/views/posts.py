@@ -21,7 +21,7 @@ class PostViewSet(ViewSet):
         try:
             #new post being created
             post = Posts.objects.create(
-                posterId=GameUsers.objects.get(pk=request.data['posterId']),
+                posterId=GameUsers.objects.get(user=request.auth.user.pk),
                 settlementId=Settlements.objects.get(pk=request.data['settlementId']),
                 item=Items.objects.get(pk=request.data['item']),
                 description=request.data['description'],
@@ -39,12 +39,14 @@ class PostViewSet(ViewSet):
             Response -- JSON serialized game instance
         """
         try:
-            # `pk` is a parameter to this function, and
-            # Django parses it from the URL route parameter
-            #   http://localhost:8000/games/2
-            #
-            # The `2` at the end of the route becomes `pk`
             post = Posts.objects.get(pk=pk)
+            gameuser = GameUsers.objects.get(user=request.auth.user)
+
+            if gameuser == post.posterId:
+                post.isMine = True
+            else:
+                post.isMine = False
+
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
@@ -87,17 +89,23 @@ class PostViewSet(ViewSet):
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-class PostSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Posts
-        fields = '__all__'
-        depth = 2
+        model = User
+        fields = ['id','first_name', 'last_name', 'username','email','is_superuser']
 
 class GameUserSerializer(serializers.ModelSerializer):
     """JSON serializer for RareUsers"""
-    posts = PostSerializer(many=True)
+    user = UserSerializer(many=False)
     class Meta:
         model = GameUsers
         fields = ('id', 'user', 'inGamename', 'discord', 'faction','server')
         depth = 1
+
+
+class PostSerializer(serializers.ModelSerializer):
+    posterId = GameUserSerializer(many=False)
+    class Meta:
+        model = Posts
+        fields = ('id','posterId','isMine','item','settlementId','description','timeStamp')
+        depth = 2
