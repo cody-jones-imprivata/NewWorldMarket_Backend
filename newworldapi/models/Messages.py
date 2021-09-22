@@ -17,10 +17,25 @@ class Messages(models.Model):
     timeStamp= models.IntegerField(null=True) 
 
     @property
-    def currentUser(self):
-        return self.__currentUser
+    def isMine(self):
+        return self.__isMine
 
-    @currentUser.setter
-    def currentUser(self, value):
-        self.__currentUser = value
+    @isMine.setter
+    def isMine(self, value):
+        self.__isMine = value
 
+    @property
+    def isMineSender(self):
+        return self.__isMineSender
+
+    @isMineSender.setter
+    def isMineSender(self, value):
+        self.__isMineSender = value
+
+    @property
+    def isMineReceiver(self):
+        return self.__isMineReceiver
+
+    @isMineReceiver.setter
+    def isMineReceiver(self, value):
+        self.__isMineReceiver = value

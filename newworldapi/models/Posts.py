@@ -14,3 +14,12 @@ class Posts(models.Model):
     settlementId = models.ForeignKey("Settlements", on_delete=models.CASCADE)
     description  = models.CharField(max_length=50)
     timeStamp = models.IntegerField() 
+
+    @property
+    def isMine(self):
+        return self.__isMine
+
+    @isMine.setter
+    def isMine(self, value):
+        self.__isMine = value
+

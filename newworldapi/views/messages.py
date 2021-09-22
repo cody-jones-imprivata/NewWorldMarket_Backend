@@ -47,12 +47,14 @@ class MessageViewSet(ViewSet):
             Response -- JSON serialized game instance
         """
         try:
-            # `pk` is a parameter to this function, and
-            # Django parses it from the URL route parameter
-            #   http://localhost:8000/games/2
-            #
-            # The `2` at the end of the route becomes `pk`
             message = Messages.objects.get(pk=pk)
+            gameuser = GameUsers.objects.get(user=request.auth.user)
+
+            if gameuser == message.sender or gameuser == message.receiver:
+                message.isMine = True
+            else:
+                message.isMine = False
+
             serializer = MessageSerializer(message, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
@@ -70,22 +72,28 @@ class MessageViewSet(ViewSet):
 
     def list(self, request):
         """Handle GET requests to posts"""
-        # verify user and who is making put request
-        sender = GameUsers.objects.get(user=request.auth.user)
-        # get all comments from the database (works 9/15)
-        # comments = Comment.objects.all()
-
-        # get all comments from the database that correspond to the current user
-        messages = Messages.objects.annotate(currentUser=Case(
-                                                When(sender=sender, then=True),
-                                                default=False,
-                                                output_field=BooleanField()
-                                            ))
-
-        post = self.request.query_params.get('post', None)
+        gameuser = GameUsers.objects.get(user=request.auth.user)      
+        post = request.query_params.get('post', None)
         if post is not None:
-            messages = messages.filter(post= post)
+            messages = Messages.objects.filter(post=post)
 
+
+        for message in messages:
+            if gameuser == message.sender :
+                message.isMine = True
+                message.isMineSender = True
+            else:
+                message.isMine = False
+                message.isMineSender = False
+
+        for message in messages:
+            if gameuser == message.receiver :
+                message.isMine = True
+                message.isMineReceiver = True
+            else:
+                message.isMine = False
+                message.isMineReceiver = False
+                
         serializer = MessageSerializer(messages, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -104,8 +112,23 @@ class MessageViewSet(ViewSet):
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','first_name', 'last_name', 'username','email','is_superuser']
+
+class GameUserSerializer(serializers.ModelSerializer):
+    """JSON serializer for RareUsers"""
+    user = UserSerializer(many=False)
+    class Meta:
+        model = GameUsers
+        fields = ('id', 'user', 'inGamename', 'discord', 'faction','server')
+        depth = 1
+
 class MessageSerializer(serializers.ModelSerializer):
+    sender = GameUserSerializer(many=False)
+    receiver = GameUserSerializer(many=False)
     class Meta:
         model = Messages
-        fields = '__all__'
+        fields = ('id','message','sender','receiver','post','isMine','isMineSender','isMineReceiver','timeStamp')
         depth = 2
