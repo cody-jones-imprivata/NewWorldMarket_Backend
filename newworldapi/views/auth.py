@@ -11,15 +11,6 @@ from rest_framework import status
 from newworldapi.models import GameUsers,Factions, Servers
 from rest_framework import serializers
 
-
-
-
-
-class MyUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GameUsers
-        fields = '__all__'
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
@@ -37,11 +28,9 @@ def login_user(request):
     # If authentication was successful, respond with their token
     if authenticated_user is not None:
         token = Token.objects.get(user=authenticated_user)
-        User = GameUsers.objects.get(user=authenticated_user)
         data = {
             'valid': True,
-            'token': token.key,
-            'user' : MyUserSerializer(User).data
+            'token': token.key
         }
         return Response(data)
     else:
