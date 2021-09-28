@@ -18,7 +18,6 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 from newworldapi.views import *
-from django.views import generic
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'posts', PostViewSet, 'posts')
 router.register(r'messages', MessageViewSet, 'messages')
@@ -30,7 +29,6 @@ router.register(r'items', ItemViewSet, 'items')
 
 
 urlpatterns = [
-    path("", generic.TemplateView.as_view(template_name="home.html")),
     path('', include(router.urls)),
     path('register', register_user),
     path('login', login_user),

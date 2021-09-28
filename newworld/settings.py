@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^b3bsb@x7v-^eug1c(72y578dr=(wrq2i@sw=e!0figw0-g-gk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['https://newworldmarketapi.herokuapp.com',
+ALLOWED_HOSTS = [
 'localhost',
 '127.0.0.1']
 
@@ -147,8 +147,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-# Activate Django-Heroku.
-django_heroku.settings(locals())
