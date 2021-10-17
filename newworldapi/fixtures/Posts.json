@@ -4,8 +4,8 @@
       "pk": 1,
       "fields": {
         "item": 2,
-        "settlementId": 1,
-        "posterId": 1,
+        "settlement": 1,
+        "poster": 1,
         "description": "True",
         "timeStamp": 1631630877
       }
@@ -15,8 +15,8 @@
       "pk": 2,
       "fields": {
         "item": 2,
-        "settlementId": 1,
-        "posterId": 1,
+        "settlement": 1,
+        "poster": 1,
         "description": "True",
         "timeStamp": 1631630877
         }

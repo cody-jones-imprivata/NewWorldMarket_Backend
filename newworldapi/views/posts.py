@@ -21,11 +21,12 @@ class PostViewSet(ViewSet):
         try:
             #new post being created
             post = Posts.objects.create(
-                posterId=GameUsers.objects.get(user=request.auth.user.pk),
-                settlementId=Settlements.objects.get(pk=request.data['settlementId']),
+                poster=GameUsers.objects.get(user=request.auth.user.pk),
+                settlement=Settlements.objects.get(pk=request.data['settlement']),
                 item=Items.objects.get(pk=request.data['item']),
                 description=request.data['description'],
-                timeStamp=request.data['timeStamp']
+                timeStamp=request.data['timeStamp'],
+                sold= False
             )
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -42,7 +43,7 @@ class PostViewSet(ViewSet):
             post = Posts.objects.get(pk=pk)
             gameuser = GameUsers.objects.get(user=request.auth.user)
 
-            if gameuser == post.posterId:
+            if gameuser == post.poster:
                 post.isMine = True
             else:
                 post.isMine = False
@@ -53,23 +54,26 @@ class PostViewSet(ViewSet):
             return HttpResponseServerError(ex)
 
     def update(self, request, pk):
-        post = Posts.objects.get(pk=pk)
-        post.settlementId = Settlements.objects.get(pk=request.data['settlementId'])
-        post.description = request.data['description']
-        post.item = Items.objects.get(pk=request.data['item'])
-        post.save()
 
-        serializer = PostSerializer(post, context={'request': request})
+        try:
+            post = Posts.objects.get(pk=pk)
+            post.settlement = Settlements.objects.get(pk=request.data['settlement'])
+            post.description = request.data['description']
+            post.item = Items.objects.get(pk=request.data['item'])
+            post.sold = request.data['sold']
+            post.save()
+            serializer = PostSerializer(post, context={'request': request})
+            return Response(serializer.data)
 
-        return Response(serializer.data)
+        except ValidationError as ex:
+            return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request):
         posts = Posts.objects.all()
+        soldQuery= request.query_params.get('sold', None)
 
-        settlement = request.query_params.get('settlementid', None)
-
-        if settlement is not None:
-            posts = posts.filter(game_type__id=settlement)
+        if soldQuery is not None:
+            posts = posts.filter(sold=soldQuery)
 
         serializer = PostSerializer(
             posts, many=True, context={'request': request})
@@ -104,8 +108,8 @@ class GameUserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    posterId = GameUserSerializer(many=False)
+    poster = GameUserSerializer(many=False)
     class Meta:
         model = Posts
-        fields = ('id','posterId','isMine','item','settlementId','description','timeStamp')
+        fields = ('id','poster','isMine','item','settlement','description','timeStamp','sold')
         depth = 2

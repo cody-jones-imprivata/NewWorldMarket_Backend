@@ -9,12 +9,14 @@ class Posts(models.Model):
         time (TimeFIeld): The time of the event
         description (CharField): : The text description of the event
     """
-    posterId  = models.ForeignKey("GameUsers", on_delete=models.CASCADE)
+    poster  = models.ForeignKey("GameUsers", on_delete=models.CASCADE)
     item = models.ForeignKey("Items", on_delete=models.CASCADE)
-    settlementId = models.ForeignKey("Settlements", on_delete=models.CASCADE)
+    settlement = models.ForeignKey("Settlements", on_delete=models.CASCADE)
     description  = models.CharField(max_length=50)
     timeStamp = models.IntegerField() 
+    sold = models.BooleanField(null=True)
 
+    
     @property
     def isMine(self):
         return self.__isMine
