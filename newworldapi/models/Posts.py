@@ -6,14 +6,13 @@ class Posts(models.Model):
         posterId (ForeignKey): the user that made the event
         item (ForeignKey): the game associated with the event
         settlementId (DateField): The date of the event
-        time (TimeFIeld): The time of the event
+        timeStamp (IntegerField): The time of the event
         description (CharField): : The text description of the event
     """
     poster  = models.ForeignKey("GameUsers", on_delete=models.CASCADE)
     item = models.ForeignKey("Items", on_delete=models.CASCADE)
     settlement = models.ForeignKey("Settlements", on_delete=models.CASCADE)
     description  = models.CharField(max_length=50)
-    timeStamp = models.IntegerField() 
     sold = models.BooleanField(null=True)
 
     

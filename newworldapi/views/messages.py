@@ -33,7 +33,6 @@ class MessageViewSet(ViewSet):
                 post=Posts.objects.get(pk=request.data['post']),
                 seen = request.data['seen'],
                 message=request.data['message'],
-                timeStamp=request.data['timeStamp'],
             )
             serializer = MessageSerializer(message, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -130,5 +129,5 @@ class MessageSerializer(serializers.ModelSerializer):
     receiver = GameUserSerializer(many=False)
     class Meta:
         model = Messages
-        fields = ('id','message','sender','receiver','post','isMine','isMineSender','isMineReceiver','timeStamp')
+        fields = ('id','message','sender','receiver','post','isMine','isMineSender','isMineReceiver')
         depth = 2

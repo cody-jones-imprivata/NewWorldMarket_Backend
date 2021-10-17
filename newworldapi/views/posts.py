@@ -25,7 +25,6 @@ class PostViewSet(ViewSet):
                 settlement=Settlements.objects.get(pk=request.data['settlement']),
                 item=Items.objects.get(pk=request.data['item']),
                 description=request.data['description'],
-                timeStamp=request.data['timeStamp'],
                 sold= False
             )
             serializer = PostSerializer(post, context={'request': request})
@@ -111,5 +110,5 @@ class PostSerializer(serializers.ModelSerializer):
     poster = GameUserSerializer(many=False)
     class Meta:
         model = Posts
-        fields = ('id','poster','isMine','item','settlement','description','timeStamp','sold')
+        fields = ('id','poster','isMine','item','settlement','description','sold')
         depth = 2
