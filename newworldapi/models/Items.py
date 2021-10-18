@@ -9,10 +9,10 @@ class Items(models.Model):
         time (TimeFIeld): The time of the event
         description (CharField): : The text description of the event
     """
-    itemName  = models.CharField(max_length=50)
-    type = models.CharField(max_length=50)
-    rarity = models.CharField(max_length=50)
-    tier  = models.CharField(max_length=50)
-    link = models.CharField(max_length=50)
-    image = models.CharField(max_length=50)
+    itemName  = models.CharField(max_length=100)
+    type = models.CharField(max_length=100)
+    rarity = models.CharField(max_length=100)
+    tier  = models.CharField(max_length=100)
+    link = models.CharField(max_length=100)
+    image = models.CharField(max_length=100)
     
