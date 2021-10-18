@@ -5,8 +5,8 @@
         {
             "previewLimit": 50,
             "driver": "SQLite",
-            "name": "NewWorldApi",
-            "database": "./db.sqlite3"
+            "database": "./db.sqlite3",
+            "name": "NewWorldBackend"
         }
     ]
 }

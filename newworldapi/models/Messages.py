@@ -6,7 +6,6 @@ class Messages(models.Model):
         posterId (ForeignKey): the user that made the event
         item (ForeignKey): the game associated with the event
         settlementId (DateField): The date of the event
-        timeStamp (IntegerField): The time of the event
         description (CharField): : The text description of the event
     """
     post = models.ForeignKey("Posts", on_delete=models.CASCADE)
