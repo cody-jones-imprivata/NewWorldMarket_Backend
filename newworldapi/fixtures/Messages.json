@@ -3,24 +3,11 @@
       "model": "newworldapi.Messages",
       "pk": 1,
       "fields": {
-        "post": 16,
+        "post": 1,
         "sender": 1,
-        "receiver": 3,
+        "receiver": 1,
         "message": "Welcome",
-        "seen": true,
-        "timeStamp": 1631630877
+        "seen": true
       }
-    },
-    {
-      "model": "newworldapi.Messages",
-      "pk": 2,
-      "fields": {
-        "post": 18,
-        "sender": 1,
-        "receiver": 3,
-        "message": "Welcome",
-        "seen": false,
-        "timeStamp": 1631630877
-        }
     }
 ]

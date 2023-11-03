@@ -1,25 +1,13 @@
 [
     {
-      "model": "newworldapi.GameUsers",
-      "pk": 2,
+      "model": "newworldapi.gameusers",
+      "pk": 1,
       "fields": {
-        "user":2,
+        "user":1,
         "inGamename": "Giptonical",
         "discord": "Giptonical#17274",
         "faction": 2,
         "server": 8
-
-      }
-    },
-    {
-      "model": "newworldapi.GameUsers",
-      "pk": 3,
-      "fields": {
-        "user":3,
-        "inGamename": "Wicks",
-        "discord": "Wicks#17274",
-        "faction": 3,
-        "server": 6
 
       }
     }
